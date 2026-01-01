@@ -1,7 +1,7 @@
 {
     "name": "@refactorian/expo-genie-cli",
     "displayName": "Expo Genie CLI",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Expo Genie CLI — The Ultimate CLI Tool for Expo & React Native: Generate UIs, manage state, and scaffold production-ready apps",
     "main": "dist/index.js",
     "bin": {
