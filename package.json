@@ -1,0 +1,83 @@
+{
+    "name": "expo-genie-cli",
+    "displayName": "Expo Genie CLI",
+    "version": "1.0.0",
+    "description": "Expo Genie CLI — The Ultimate CLI Tool for Expo & React Native: Generate UIs, manage state, and scaffold production-ready apps",
+    "main": "dist/index.js",
+    "bin": {
+        "expo-genie": "./bin/expo-genie.js",
+        "eg": "./bin/expo-genie.js",
+        "🧞": "./bin/expo-genie.js"
+    },
+    "scripts": {
+        "build": "tsc && node scripts/copy-assets.js",
+        "dev": "tsc --watch",
+        "start": "node dist/index.js",
+        "update-templates": "node scripts/update-templates.js",
+        "prepublishOnly": "npm run build",
+        "test": "jest",
+        "lint": "eslint src --ext .ts",
+        "lint:ci": "eslint src --ext .ts --quiet",
+        "format": "prettier --write \"src/**/*.ts\"",
+        "ci": "npm run build && npm test && npm run lint:ci"
+    },
+    "keywords": [
+        "react-native",
+        "expo",
+        "cli",
+        "scaffolding",
+        "generator",
+        "mobile",
+        "typescript"
+    ],
+    "author": "Expo Genie CLI Team",
+    "license": "MIT",
+    "dependencies": {
+        "axios": "^1.6.5",
+        "boxen": "^5.1.2",
+        "chalk": "^4.1.2",
+        "cli-table3": "^0.6.3",
+        "commander": "^11.1.0",
+        "ejs": "^3.1.9",
+        "execa": "^5.1.1",
+        "figlet": "^1.7.0",
+        "fs-extra": "^11.2.0",
+        "gradient-string": "^2.0.2",
+        "inquirer": "^8.2.5",
+        "listr2": "^8.0.1",
+        "node-fetch": "^2.7.0",
+        "ora": "^5.4.1",
+        "prompts": "^2.4.2",
+        "semver": "^7.5.4",
+        "validate-npm-package-name": "^5.0.0"
+    },
+    "devDependencies": {
+        "@types/ejs": "^3.1.5",
+        "@types/figlet": "^1.5.8",
+        "@types/fs-extra": "^11.0.4",
+        "@types/gradient-string": "^1.1.5",
+        "@types/inquirer": "^9.0.7",
+        "@types/jest": "^29.5.11",
+        "@types/node": "^20.10.6",
+        "@types/semver": "^7.5.6",
+        "@types/validate-npm-package-name": "^4.0.2",
+        "@typescript-eslint/eslint-plugin": "^6.18.1",
+        "@typescript-eslint/parser": "^6.18.1",
+        "eslint": "^8.56.0",
+        "jest": "^29.7.0",
+        "prettier": "^3.1.1",
+        "ts-jest": "^29.4.6",
+        "typescript": "^5.3.3"
+    },
+    "engines": {
+        "node": ">=16.0.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/refactorian/expo-genie-cli.git"
+    },
+    "bugs": {
+        "url": "https://github.com/refactorian/expo-genie-cli/issues"
+    },
+    "homepage": "https://github.com/refactorian/expo-genie-cli#readme"
+}
