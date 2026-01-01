@@ -1,5 +1,5 @@
 {
-    "name": "@refactorian/expo-genie-cli",
+    "name": "expo-genie-cli",
     "displayName": "Expo Genie CLI",
     "version": "1.0.2",
     "description": "Expo Genie CLI 🧞 The ultimate CLI tool for Expo app development. Scaffolds production-ready apps, generates code, and integrates complex features in seconds.",

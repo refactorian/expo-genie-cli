@@ -5,7 +5,7 @@ The ultimate CLI tool for Expo app development. Scaffolds production-ready apps,
 ## Installation
 
 ```bash
-npm install -g @refactorian/expo-genie-cli
+npm install -g expo-genie-cli
 ```
 
 After installation, verify that the CLI is installed correctly by checking the version. The CLI can be invoked using any of these aliases:
