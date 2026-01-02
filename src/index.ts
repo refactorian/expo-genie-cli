@@ -34,8 +34,8 @@ program
   .description('🧞 EXPO GENIE CLI - Your Wish is My Command')
   .version('1.0.4')
   .aliases(['eg', '🧞'])
-  .hook('preAction', (thisCommand) => {
-    console.log(thisCommand.args.length);
+  .hook('preAction', () => {
+    // console.log(thisCommand.args.length);
     // if (thisCommand.args.length === 0 && !process.argv.slice(2).length) {
     //   displayBanner();
     // }

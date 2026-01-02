@@ -45,10 +45,150 @@ export async function initCommand(projectName?: string, options: InitOptions = {
       projectName = nameAnswer.projectName;
     }
 
-    const projectPath = path.join(process.cwd(), projectName ?? '');
+    // Ask for directory choice
+    const { directoryChoice } = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'directoryChoice',
+        message: 'Where should we create the project?',
+        choices: [
+          { name: 'New directory', value: 'new' },
+          { name: 'Same directory', value: 'same' },
+        ],
+        default: 'new',
+      },
+    ]);
 
-    // Check if directory exists
-    if (await fileSystem.fileExists(projectPath)) {
+    let projectPath: string;
+    if (directoryChoice === 'same') {
+      projectPath = process.cwd();
+    } else {
+      projectPath = path.join(process.cwd(), projectName ?? '');
+    }
+
+    // Check if expo-genie.json already exists in target directory
+    if (await config.isExpoGenieProject(projectPath)) {
+      ui.warningBox('Existing Project Detected', [
+        'This directory is already an Expo Genie project.',
+        'An expo-genie.json configuration file already exists.',
+      ]);
+
+      const { reinit } = await inquirer.prompt([
+        {
+          type: 'list',
+          name: 'reinit',
+          message: 'What would you like to do?',
+          choices: [
+            { name: 'Overwrite current config and reinitialize', value: 'overwrite' },
+            { name: 'Exit', value: 'exit' },
+          ],
+          default: 'exit',
+        },
+      ]);
+
+      if (reinit === 'exit') {
+        ui.info('Initialization cancelled');
+        process.exit(0);
+      }
+
+      ui.info('Overwriting existing configuration...');
+    }
+
+    // Check if app.json already exists in target directory
+    const appJsonPath = path.join(projectPath, 'app.json');
+    const isExistingExpoProject = await fileSystem.fileExists(appJsonPath);
+
+    if (isExistingExpoProject) {
+      ui.info('✨ Detected existing Expo project. Initializing Expo Genie...');
+
+      // For existing projects, we still need to know some preferences
+      // Select package manager
+      let pm = options.packageManager;
+      if (!pm) {
+        const pmAnswer = await inquirer.prompt([
+          {
+            type: 'list',
+            name: 'packageManager',
+            message: 'Package manager:',
+            choices: [
+              { name: 'npm', value: 'npm' },
+              { name: 'yarn', value: 'yarn' },
+              { name: 'pnpm', value: 'pnpm' },
+              { name: 'bun', value: 'bun' },
+            ],
+            default: 'npm',
+          },
+        ]);
+        pm = pmAnswer.packageManager;
+      }
+
+      // Select UI Library
+      let selectedUILibrary = options.uiLibrary;
+      if (!selectedUILibrary) {
+        const uiAnswer = await inquirer.prompt([
+          {
+            type: 'list',
+            name: 'uiLibrary',
+            message: 'UI Library:',
+            choices: (Object.values(uiLibraries) as any[]).map((lib: any) => ({
+              name: lib.displayName,
+              value: lib.name,
+            })),
+            default: 'nativewind',
+          },
+        ]);
+        selectedUILibrary = uiAnswer.uiLibrary;
+      }
+
+      // Select State Management
+      let selectedStateManagement = options.stateManagement;
+      if (!selectedStateManagement) {
+        const stateAnswer = await inquirer.prompt([
+          {
+            type: 'list',
+            name: 'stateManagement',
+            message: 'State Management:',
+            choices: (Object.values(stateManagementLibraries) as any[]).map((lib: any) => ({
+              name: lib.displayName,
+              value: lib.name,
+            })),
+            default: 'zustand',
+          },
+        ]);
+        selectedStateManagement = stateAnswer.stateManagement;
+      }
+
+      const spinner = ui.spinner('Initializing Expo Genie configuration...');
+      try {
+        const projectConfig = config.createDefaultConfig(
+          projectName!,
+          'existing',
+          selectedUILibrary!,
+          selectedStateManagement!,
+          pm!
+        );
+        await config.saveProjectConfig(projectPath, projectConfig);
+        await config.addRecentProject(projectPath);
+        spinner.succeed('Expo Genie initialized successfully!');
+
+        ui.successBox('🎉 Expo Genie is ready!', [
+          '',
+          `📁 Project: ${projectName}`,
+          `🎨 UI Library: ${selectedUILibrary}`,
+          `🔄 State: ${selectedStateManagement}`,
+          `📦 Package Manager: ${pm}`,
+          '',
+          '🚀 You can now use "eg add" to add features to your project.',
+        ]);
+        return;
+      } catch (error) {
+        spinner.fail('Failed to initialize Expo Genie');
+        throw error;
+      }
+    }
+
+    // Check if directory exists (for new projects)
+    if (directoryChoice === 'new' && await fileSystem.fileExists(projectPath)) {
       const { overwrite } = await inquirer.prompt([
         {
           type: 'confirm',

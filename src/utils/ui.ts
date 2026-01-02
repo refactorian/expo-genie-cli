@@ -57,6 +57,23 @@ export const ui = {
     );
   },
 
+  warningBox: (title: string, content: string[]) => {
+    const message = [
+      chalk.yellow.bold(`⚠️  ${title}`),
+      '',
+      ...content.map(line => chalk.gray(line)),
+    ].join('\n');
+
+    console.log(
+      boxen(message, {
+        padding: 1,
+        margin: 1,
+        borderStyle: 'round',
+        borderColor: 'yellow',
+      })
+    );
+  },
+
   section: (title: string) => {
     console.log('\n' + chalk.cyan.bold(`${title}`));
     console.log(chalk.gray('─'.repeat(50)));
