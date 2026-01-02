@@ -32,7 +32,7 @@ const displayBanner = () => {
 program
   .name('expo-genie')
   .description('🧞 EXPO GENIE CLI - Your Wish is My Command')
-  .version('1.0.1')
+  .version('1.0.4')
   .aliases(['eg', '🧞'])
   .hook('preAction', (thisCommand) => {
     console.log(thisCommand.args.length);
